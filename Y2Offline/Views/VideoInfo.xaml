@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Y2Offline.Views.VideoInfo">
     <ContentPage.Content>
-        <StackLayout>
-            <Label x:Name="testi" Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout BackgroundColor="#3b403f">
+                <Image HeightRequest="150" Margin="40, 10" x:Name="ThumbnailImage"></Image>
+                <Label HorizontalTextAlignment="Start" Margin="5, 0" TextColor="Black" FontSize="20" x:Name="VideoTitle"></Label>
+                <Label FontSize="16" x:Name="ChannelName" Margin="5, 0"></Label>
+                <StackLayout x:Name="DownloadOptions">
+                  
+                    
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

@@ -36,11 +36,8 @@ namespace Y2Offline.Views
                     Image image = new Image();
                     image.WidthRequest = 60;
                     image.HeightRequest = 20;
-                    
-                    image.Source = ImageSource.FromStream(() => {
-                        video.Thumbnail.Flush();
-                        video.Thumbnail.Position = 0;
-                        return video.Thumbnail; });
+
+                    image.Source = video.Thumbnail;
 
 
                     stackLayout.Children.Add(image);
@@ -51,6 +48,7 @@ namespace Y2Offline.Views
                     label.FontSize = 16;
                     label.VerticalOptions = LayoutOptions.CenterAndExpand;
                     label.Text = video.Title;
+                    label.TextColor = Color.Black;
 
                     stackLayout1.Children.Add(label);
 
@@ -58,6 +56,7 @@ namespace Y2Offline.Views
                     label1.FontSize = 12;
                     label1.VerticalOptions = LayoutOptions.CenterAndExpand;
                     label1.Text = video.Author;
+                    label1.TextColor = Color.Black;
 
                     stackLayout1.Children.Add(label1);
 
@@ -65,7 +64,7 @@ namespace Y2Offline.Views
 
                     Button button = new Button();
                     
-                    button.Clicked += async (sender2, args) => await Navigation.PushAsync(new VideoInfo(video.Id));
+                    button.Clicked += async (sender2, args) => await Navigation.PushAsync(new VideoInfo(video));
                     button.HeightRequest = 4;
                     
                     button.Text = "Download";

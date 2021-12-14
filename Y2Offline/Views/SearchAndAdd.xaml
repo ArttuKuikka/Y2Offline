@@ -1,15 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Y2Offline.Views.SearchAndAdd">
+             x:Class="Y2Offline.Views.SearchAndAdd"
+             >
     <ContentPage.Content>
-        <StackLayout Margin="20, 10">
-            <Entry Placeholder="Search Youtube or paste URL" x:Name="SearchBox" />
-            <Button Text="Search" x:Name="SearchButton" Clicked="SearchButton_Clicked"></Button>
-            
+        <StackLayout BackgroundColor="#3b403f">
             <ScrollView>
-                <StackLayout x:Name="vidview">
-                    
+                <StackLayout Margin="20, 10">
+                    <Entry Placeholder="Search Youtube or paste URL" PlaceholderColor="White" HeightRequest="50" FontSize="20" x:Name="SearchBox" TextColor="White" BackgroundColor="#4f4f4f" />
+                    <Button Text="Search" x:Name="SearchButton" Clicked="SearchButton_Clicked" BackgroundColor="#2f3030"></Button>
+
+
+                    <StackLayout x:Name="vidview">
+
+                    </StackLayout>
+
                 </StackLayout>
             </ScrollView>
         </StackLayout>

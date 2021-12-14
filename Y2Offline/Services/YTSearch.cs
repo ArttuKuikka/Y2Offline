@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
@@ -70,10 +71,12 @@ namespace Y2Offline.Services
                         MemoryStream ms = new MemoryStream(imageBytes);
                         
 
-                            ms.Flush();
-                            ms.Position = 0;
-                            vid.Thumbnail = ms;
-                        
+                            vid.Thumbnail = ImageSource.FromStream(() => {
+                                ms.Flush();
+                                ms.Position = 0;
+                                return ms;
+                            });
+
 
                         vidlist.Add(vid);
 
