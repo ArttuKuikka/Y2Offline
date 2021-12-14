@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Xamarin.Forms;
-using Y2Offline.ViewModels;
+
 using Y2Offline.Views;
 
 namespace Y2Offline
@@ -11,8 +11,7 @@ namespace Y2Offline
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            
         }
 
     }

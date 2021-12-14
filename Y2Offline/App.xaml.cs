@@ -13,7 +13,7 @@ namespace Y2Offline
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            
             MainPage = new AppShell();
         }
 
