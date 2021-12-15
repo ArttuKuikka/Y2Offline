@@ -9,12 +9,16 @@
     <PackageReference Include="Google.Apis" Version="1.55.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.55.0.2449" />
+    <PackageReference Include="Octane.Xam.VideoPlayer" Version="3.1.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />  
     <PackageReference Include="Y2Sharp" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Views\Player.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\SearchAndAdd.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

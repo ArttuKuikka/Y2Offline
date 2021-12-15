@@ -24,8 +24,19 @@ namespace Y2Offline.Views
         {
             try
             {
+                ActivityIndicator activityIndicator = new ActivityIndicator();
+                activityIndicator.IsVisible = true;
+                activityIndicator.IsEnabled = true;
+                activityIndicator.IsRunning = true;
+                //{ IsRunning = true; IsEnabled = true; IsVisible = true; };
+                mainlayout.Children.Add(activityIndicator);
+
                 var yt = new Services.YTSearch();
                 List<Services.YTVid> result = await yt.Run(SearchBox.Text);
+
+                activityIndicator.IsRunning = false;
+                
+
                 foreach(var video in result)
                 {
                     

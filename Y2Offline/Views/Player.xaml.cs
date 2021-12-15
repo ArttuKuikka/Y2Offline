@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace Y2Offline.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Watch : ContentPage
+    public partial class Player : ContentPage
     {
-        public Watch()
+        public Player()
         {
             InitializeComponent();
-        }
 
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new Player());
+            DependencyService.Get<istatu>
         }
     }
+
+    
 }

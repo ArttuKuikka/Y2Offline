@@ -39,8 +39,14 @@ namespace Y2Offline.Views
             button.Text = "Download";
             button.VerticalOptions = LayoutOptions.End;
             button.HorizontalOptions = LayoutOptions.End;
-            button.Margin = new Thickness(120, 0, 0, 0);
             
+            button.Clicked += async (sender2, args) =>
+            {
+                button.IsEnabled = false;
+                button.Text = "Downloading...";
+            };
+            
+
 
             stackLayout.Children.Add(label);
             stackLayout.Children.Add(button);
@@ -48,11 +54,12 @@ namespace Y2Offline.Views
             frame.Content = stackLayout;
             frame.BorderColor = Color.Black;
             frame.Margin = new Thickness(5);
-            
+
             DownloadOptions.Children.Add(frame);
-            DownloadOptions.Children.Add(frame);
-            DownloadOptions.Children.Add(frame);
-            
+
+
+
+
             //var video = new Y2Sharp.Youtube.Video(videoid); //tässkin rikki
         }
     }
