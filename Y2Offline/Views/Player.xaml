@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:o="clr-namespace:Octane.Xamarin.Forms.VideoPlayer;assembly=Octane.Xamarin.Forms.VideoPlayer"
+             xmlns:vlc="clr-namespace:LibVLCSharp.Forms.Shared;assembly=LibVLCSharp.Forms" xmlns:viewmodels="clr-namespace:Y2Offline.ViewModels" x:DataType="viewmodels:MediaPlayerElementPageViewModel"
              x:Class="Y2Offline.Views.Player"
              NavigationPage.HasNavigationBar="False"
+             NavigationPage.HasBackButton="False"
+             
              >
     <ContentPage.Content>
-        <StackLayout>
-            <o:VideoPlayer AutoPlay="True" DisplayControls="True" Source="https://arttukuikka.fi/error.mp4" />
-        </StackLayout>
+        <RelativeLayout>
+            <StackLayout>
+                <vlc:MediaPlayerElement x:Name="MP"></vlc:MediaPlayerElement>
+            </StackLayout>
+            <StackLayout >
+                <ImageButton HorizontalOptions="Start" BackgroundColor="#262626" VerticalOptions="Start" WidthRequest="45" HeightRequest="40" Source="left.png" Clicked="ImageButton_Clicked" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=50}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=50}" ></ImageButton>
+
+            </StackLayout>
+
+        </RelativeLayout>
+
     </ContentPage.Content>
 </ContentPage>
