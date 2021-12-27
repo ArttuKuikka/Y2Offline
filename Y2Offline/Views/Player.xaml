@@ -5,19 +5,14 @@
              x:Class="Y2Offline.Views.Player"
              NavigationPage.HasNavigationBar="False"
              NavigationPage.HasBackButton="False"
+             x:Name="ThisContentPage"
              
              >
-    <ContentPage.Content>
-        <RelativeLayout>
-            <StackLayout>
+    <ContentPage.Content >
+        
+            <StackLayout x:Name="Layout" BackgroundColor="Green">
                 <vlc:MediaPlayerElement x:Name="MP"></vlc:MediaPlayerElement>
             </StackLayout>
-            <StackLayout >
-                <ImageButton HorizontalOptions="Start" BackgroundColor="#262626" VerticalOptions="Start" WidthRequest="45" HeightRequest="40" Source="left.png" Clicked="ImageButton_Clicked" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1, Constant=50}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1, Constant=50}" ></ImageButton>
-
-            </StackLayout>
-
-        </RelativeLayout>
 
     </ContentPage.Content>
 </ContentPage>

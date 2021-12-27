@@ -4,6 +4,8 @@
              x:Class="Y2Offline.Views.Settings">
     <ContentPage.Content>
         <StackLayout>
+
+            <Entry x:Name="notch" HeightRequest="40" WidthRequest="60" TextChanged="notch_TextChanged"></Entry>
             <Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />

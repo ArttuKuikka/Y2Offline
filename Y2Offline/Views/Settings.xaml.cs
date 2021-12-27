@@ -15,6 +15,12 @@ namespace Y2Offline.Views
         public Settings()
         {
             InitializeComponent();
+            //notch.Text = Settings1.Default.notchint.ToString();
+        }
+
+        private void notch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Settings1.Default.notchint = Int32.Parse(notch.Text); //joskus int check
         }
     }
 }

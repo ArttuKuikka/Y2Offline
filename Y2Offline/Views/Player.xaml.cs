@@ -38,7 +38,7 @@ namespace Y2Offline.Views
             var _libvlc = new LibVLC();
             var _mediaplayer = new MediaPlayer(_libvlc)
             {
-                Media = new Media(_libvlc, new Uri("https://arttukuikka.fi/otv.mp4"))
+                Media = new Media(_libvlc, new Uri("https://arttukuikka.fi/otv.mp4"))//media
             };
 
             MP.MediaPlayer = _mediaplayer;
@@ -56,6 +56,7 @@ namespace Y2Offline.Views
         private void ImageButton_Clicked(object sender, EventArgs e)
         {
             base.OnBackButtonPressed();
+            DependencyService.Get<IStatusBar>().ShowStatusBar();
         }
     }
 
