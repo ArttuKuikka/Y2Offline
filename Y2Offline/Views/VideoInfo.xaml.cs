@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+
 using Xamarin.Forms.Xaml;
+
 
 
 namespace Y2Offline.Views
@@ -15,6 +18,9 @@ namespace Y2Offline.Views
     {
         public VideoInfo(Services.YTVid video)
         {
+            
+            
+            
             InitializeComponent();
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
@@ -44,6 +50,19 @@ namespace Y2Offline.Views
             {
                 button.IsEnabled = false;
                 button.Text = "Downloading...";
+                
+                await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+
+                var y2video = new Y2Sharp.Youtube.Video();
+
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+                var path = Path.Combine(filePath, video.Title);
+
+                await y2video.DownloadAsync(path + ".mp3");
+
+                button.Text = "Downloaded";
+                
             };
             
 
@@ -59,8 +78,12 @@ namespace Y2Offline.Views
 
 
 
+            
+           
 
-            //var video = new Y2Sharp.Youtube.Video(videoid); //tässkin rikki
+           
         }
+
+        
     }
 }

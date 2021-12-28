@@ -10,7 +10,7 @@
              >
     <ContentPage.Content >
         
-            <StackLayout x:Name="Layout" BackgroundColor="Green">
+            <StackLayout x:Name="Layout">
                 <vlc:MediaPlayerElement x:Name="MP"></vlc:MediaPlayerElement>
             </StackLayout>
 

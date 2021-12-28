@@ -3,11 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Y2Offline.Views.Watch">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            <Button Text="Open video" Clicked="Button_Clicked"></Button>
+        <StackLayout x:Name="MainStack">
+            
+          
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -14,7 +14,9 @@ namespace Y2Offline.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Player : ContentPage
     {
-        public Player()
+        public string videopath { get; set; }
+        
+        public Player(string path)
         {
             InitializeComponent();
 
@@ -25,7 +27,7 @@ namespace Y2Offline.Views
             MP.HeightRequest = mainDisplayInfo.Height / mainDisplayInfo.Density;
             MP.WidthRequest = mainDisplayInfo.Width / mainDisplayInfo.Density;
 
-            
+            videopath = path;
         }
 
         protected override void OnAppearing()
@@ -38,7 +40,7 @@ namespace Y2Offline.Views
             var _libvlc = new LibVLC();
             var _mediaplayer = new MediaPlayer(_libvlc)
             {
-                Media = new Media(_libvlc, new Uri("https://arttukuikka.fi/otv.mp4"))//media
+                Media = new Media(_libvlc, new Uri(videopath))//media
             };
 
             MP.MediaPlayer = _mediaplayer;
