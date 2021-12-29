@@ -16,13 +16,15 @@ namespace Y2Offline.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VideoInfo : ContentPage
     {
+        public Y2Sharp.Youtube.Video y2video { get; set; }
         public VideoInfo(Services.YTVid video)
         {
             InitializeComponent();
 
+            if(video == null) { DisplayAlert("Error", "error getting video info", "OK"); return; }
             
 
-            var y2video = new Y2Sharp.Youtube.Video();
+            y2video = new Y2Sharp.Youtube.Video();
 
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
@@ -66,7 +68,7 @@ namespace Y2Offline.Views
 
                 try
                 {
-                    await y2video.DownloadAsync(path + ".mp3");
+                    await Download("128", "mp3", video);
 
                     button2.Text = "Downloaded";
                 }
@@ -121,15 +123,15 @@ namespace Y2Offline.Views
                 
                 
 
-                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                //string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-                var path = Path.Combine(filePath, video.Title);
+                //var path = Path.Combine(filePath, video.Title);
 
                 var res = vid.Replace("p", string.Empty);
 
                 try
                 {
-                    await y2video.DownloadAsync(path + ".mp4", "mp4", res);
+                    await Download(res, "mp4", video);
 
                     button.Text = "Downloaded";
                 }
@@ -152,6 +154,30 @@ namespace Y2Offline.Views
             DownloadOptions.Children.Add(frame);
             }
      
+        }
+
+        public async Task Download(string quality, string type, Services.YTVid video)
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            string folderpath = Path.Combine(filePath, video.Id);
+
+            Directory.CreateDirectory(folderpath);
+
+            var videoname = Path.Combine(folderpath, video.Id + "." + type);
+
+            await y2video.DownloadAsync(videoname, type, quality);
+
+            
+
+            string infofilecontent = "Title=" + video.Title + ";" + "Author=" + video.Author + ";" + "Type="+ type + ";";
+
+            var infofilepath = Path.Combine(folderpath, video.Id + ".txt");  
+
+            File.WriteAllText(infofilepath, infofilecontent);
+
+            
+
         }
 
         

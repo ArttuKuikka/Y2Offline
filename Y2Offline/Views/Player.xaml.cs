@@ -54,7 +54,7 @@ namespace Y2Offline.Views
 
         private async void mp_error(object sender, EventArgs e)
         {
-            await DisplayAlert("Error", "Error", "ok");
+            await DisplayAlert("Error", "Error while playing media", "ok");
         }
 
         private void ImageButton_Clicked(object sender, EventArgs e)
