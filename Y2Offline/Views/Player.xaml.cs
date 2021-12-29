@@ -48,6 +48,8 @@ namespace Y2Offline.Views
             _mediaplayer.EncounteredError += mp_error;
 
             _mediaplayer.Play();
+
+            
         }
 
         private async void mp_error(object sender, EventArgs e)

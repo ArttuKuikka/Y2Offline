@@ -74,8 +74,12 @@ namespace Y2Offline.Views
                     stackLayout.Children.Add(stackLayout1);
 
                     Button button = new Button();
-                    
-                    button.Clicked += async (sender2, args) => await Navigation.PushAsync(new VideoInfo(video));
+
+                    button.Clicked += async (sender2, args) =>
+                    {
+                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+                        await Navigation.PushAsync(new VideoInfo(video));
+                    };
                     button.HeightRequest = 4;
                     
                     button.Text = "Download";

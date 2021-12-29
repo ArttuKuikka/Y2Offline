@@ -18,15 +18,83 @@ namespace Y2Offline.Views
     {
         public VideoInfo(Services.YTVid video)
         {
-            
-            
-            
             InitializeComponent();
+
+            
+
+            var y2video = new Y2Sharp.Youtube.Video();
+
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
             ThumbnailImage.Source = video.Thumbnail;
 
-            Frame frame = new Frame();
+
+            //mp3 manual adding
+
+            Frame frame2 = new Frame();
+
+            StackLayout stackLayout2 = new StackLayout();
+            stackLayout2.Orientation = StackOrientation.Horizontal;
+            stackLayout2.Margin = new Thickness(5, 0, 0, 0);
+            frame2.BackgroundColor = Color.FromHex("#434545");
+
+
+
+            Label label2 = new Label();
+            label2.FontSize = 25;
+            label2.VerticalTextAlignment = TextAlignment.Center;
+            label2.TextColor = Color.Black;
+            label2.Text = "MP3";
+
+            Button button2 = new Button();
+            button2.Text = "Download";
+            button2.VerticalOptions = LayoutOptions.End;
+            button2.HorizontalOptions = LayoutOptions.End;
+
+            button2.Clicked += async (sender2, args) =>
+            {
+                button2.IsEnabled = false;
+                button2.Text = "Downloading...";
+
+
+
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+                var path = Path.Combine(filePath, video.Title);
+
+
+
+                try
+                {
+                    await y2video.DownloadAsync(path + ".mp3");
+
+                    button2.Text = "Downloaded";
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error downloading", ex.ToString(), "OK");
+                }
+
+            };
+
+
+
+            stackLayout2.Children.Add(label2);
+            stackLayout2.Children.Add(button2);
+
+            frame2.Content = stackLayout2;
+            frame2.BorderColor = Color.Black;
+            frame2.Margin = new Thickness(5);
+
+            DownloadOptions.Children.Add(frame2);
+            //mp3 manual adding
+
+
+            foreach (var vid in y2video.Resolutions)
+            {
+
+
+                Frame frame = new Frame();
 
             StackLayout stackLayout = new StackLayout();
             stackLayout.Orientation = StackOrientation.Horizontal;
@@ -39,7 +107,7 @@ namespace Y2Offline.Views
             label.FontSize = 25;
             label.VerticalTextAlignment = TextAlignment.Center;
             label.TextColor = Color.Black;
-            label.Text = "1080P";
+            label.Text = vid;
 
             Button button = new Button();
             button.Text = "Download";
@@ -51,17 +119,24 @@ namespace Y2Offline.Views
                 button.IsEnabled = false;
                 button.Text = "Downloading...";
                 
-                await Y2Sharp.Youtube.Video.GetInfo(video.Id);
-
-                var y2video = new Y2Sharp.Youtube.Video();
+                
 
                 string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
                 var path = Path.Combine(filePath, video.Title);
 
-                await y2video.DownloadAsync(path + ".mp3");
+                var res = vid.Replace("p", string.Empty);
 
-                button.Text = "Downloaded";
+                try
+                {
+                    await y2video.DownloadAsync(path + ".mp4", "mp4", res);
+
+                    button.Text = "Downloaded";
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Error downloading", ex.ToString(), "OK");
+                }
                 
             };
             
@@ -75,14 +150,11 @@ namespace Y2Offline.Views
             frame.Margin = new Thickness(5);
 
             DownloadOptions.Children.Add(frame);
-
-
-
-            
-           
-
-           
+            }
+     
         }
+
+        
 
         
     }
