@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout BackgroundColor="#3b403f">
-                <Image HeightRequest="150" Margin="40, 10" x:Name="ThumbnailImage"></Image>
+                <Image HeightRequest="200" Margin="40, 10" x:Name="ThumbnailImage"></Image>
                 <Label HorizontalTextAlignment="Start" Margin="5, 0" TextColor="Black" FontSize="20" x:Name="VideoTitle"></Label>
                 <Label FontSize="16" x:Name="ChannelName" Margin="5, 0"></Label>
                 <StackLayout x:Name="DownloadOptions">

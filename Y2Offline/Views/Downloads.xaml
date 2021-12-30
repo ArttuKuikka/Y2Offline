@@ -1,13 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Y2Offline.Views.Watch">
+             x:Class="Y2Offline.Views.Downloads">
     <ContentPage.Content>
-        <ScrollView>
-            <StackLayout x:Name="MainStack" BackgroundColor="#3b403f">
-
-
-            </StackLayout>
-        </ScrollView>
+        <StackLayout BackgroundColor="#3b403f">
+            <Label Text="Downloads"></Label>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -5,10 +5,11 @@
     <ContentPage.Content>
         <StackLayout>
 
-            <Entry x:Name="notch" HeightRequest="40" WidthRequest="60" TextChanged="notch_TextChanged"></Entry>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout BackgroundColor="Red" HeightRequest="50" WidthRequest="50">
+                <StackLayout.GestureRecognizers>
+                    <SwipeGestureRecognizer Direction="Left" Swiped="SwipeGestureRecognizer_Swiped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

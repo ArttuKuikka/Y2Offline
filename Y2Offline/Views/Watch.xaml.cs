@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+
+
 
 namespace Y2Offline.Views
 {
@@ -17,34 +20,60 @@ namespace Y2Offline.Views
         {
             InitializeComponent();
 
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            ToolbarItems.Add(new ToolbarItem("refresh", "refresh.png", () =>
+            {
+                
+                MainStack.Children.Clear();
+                MainWatch();
+            }));
 
-            
+            MainWatch();
+        }
+
+        public void MainWatch()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
             var folderlist = Directory.GetDirectories(filePath);
             foreach (var folder in folderlist)
             {
-                
 
+                //get info for each video
                 var foldername = folder.Replace(filePath, string.Empty);
                 foldername = foldername.Replace("/", string.Empty);
 
                 var Infotextapth = Path.Combine(folder, foldername + ".txt");
 
-                var infotext = File.ReadAllText(Infotextapth);
+                var Title = "Error getting info";
+                var Author = foldername;
+                var Type = "mp4";
 
+                if (File.Exists(Infotextapth))
+                {
+                    var infotext = File.ReadAllText(Infotextapth);
 
-                var Title = GetBetween(infotext, "Title=", ";");
-                var Author = GetBetween(infotext, "Author=", ";");
-                var Type = GetBetween(infotext, "Type=", ";");
-                var videopath = folder.Replace(filePath, string.Empty);
-                videopath = videopath.Replace("/", string.Empty);
+                    Title = GetBetween(infotext, "Title=", ";");
+                    Author = GetBetween(infotext, "Author=", ";");
+                    Type = GetBetween(infotext, "Type=", ";");
+                }
+                else
+                {
+                    DisplayAlert("Error", "Error getting info for " + foldername, "OK");
 
-                videopath = Path.Combine(folder, videopath + "." + Type);
+                }
+
+                var videopath = Path.Combine(folder, foldername + "." + Type);
+
+                var thumbnailpath = Path.Combine(folder, foldername + ".jpg"); 
+
 
 
 
                 //create ui
+
+                Frame frame = new Frame();
+                frame.BackgroundColor = Color.FromHex("#434545");
+
                 StackLayout stackLayout = new StackLayout();
                 stackLayout.Orientation = StackOrientation.Horizontal;
 
@@ -52,7 +81,7 @@ namespace Y2Offline.Views
                 image.WidthRequest = 60;
                 image.HeightRequest = 20;
 
-                //image.Source = video.Thumbnail;
+                image.Source = thumbnailpath;
 
 
                 stackLayout.Children.Add(image);
@@ -62,8 +91,18 @@ namespace Y2Offline.Views
                 Label label = new Label();
                 label.FontSize = 16;
                 label.VerticalOptions = LayoutOptions.CenterAndExpand;
+
+                if(Title == "Error getting info")
+                {
+                    label.TextColor = Color.Red;
+                }
+                else
+                {
+                    label.TextColor = Color.Black;
+                }
+
                 label.Text = Title;
-                label.TextColor = Color.Black;
+                
 
                 stackLayout1.Children.Add(label);
 
@@ -77,25 +116,41 @@ namespace Y2Offline.Views
 
                 stackLayout.Children.Add(stackLayout1);
 
-                Button button = new Button();
+              
 
-                button.Clicked += async (sender2, args) => await Navigation.PushModalAsync(new Player(videopath));
-                button.HeightRequest = 4;
+                var tgr = new TapGestureRecognizer();
+                tgr.Tapped += async (sender2, args) => await Navigation.PushModalAsync(new Player(videopath));
+                stackLayout.GestureRecognizers.Add(tgr);
 
-                button.Text = "Watch";
-                stackLayout.Children.Add(button);
+                var sgr = new SwipeGestureRecognizer();
+                sgr.Direction = SwipeDirection.Left;
+                sgr.Swiped += async (sender2, args) =>
+                {
+                    MainStack.Children.Remove(stackLayout);
 
-                MainStack.Children.Add(stackLayout);
+                    try
+                    {
+                        IFolder ifolder = FileSystem.Current.LocalStorage;
+                        IFolder file = await ifolder.GetFolderAsync(folder);
+                        await file.DeleteAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", "Error while deleting file, you might have swiped too fast", "OK");
+                    }
+
+                };
+
+                stackLayout.GestureRecognizers.Add(sgr);
 
 
-
-
+                frame.Content = stackLayout;
+                frame.BorderColor = Color.Black;
+                frame.Margin = new Thickness(2);
+                MainStack.Children.Add(frame);
 
 
             }
-
-
-           
         }
 
         public static string GetBetween(string strSource, string strStart, string strEnd)
@@ -110,6 +165,8 @@ namespace Y2Offline.Views
 
             return "";
         }
+
+
 
 
     }

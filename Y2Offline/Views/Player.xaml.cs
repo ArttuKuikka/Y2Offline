@@ -40,7 +40,7 @@ namespace Y2Offline.Views
             var _libvlc = new LibVLC();
             var _mediaplayer = new MediaPlayer(_libvlc)
             {
-                Media = new Media(_libvlc, new Uri(videopath))//media
+                Media = new Media(_libvlc, new Uri(videopath))
             };
 
             MP.MediaPlayer = _mediaplayer;
@@ -50,6 +50,16 @@ namespace Y2Offline.Views
             _mediaplayer.Play();
 
             
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MP.MediaPlayer.Stop();
+           //should dispose but that crashes the app so no disposing
+
+           DependencyService.Get<IStatusBar>().ShowStatusBar();
         }
 
         private async void mp_error(object sender, EventArgs e)

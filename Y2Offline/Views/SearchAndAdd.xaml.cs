@@ -18,12 +18,24 @@ namespace Y2Offline.Views
         public SearchAndAdd()
         {
             InitializeComponent();
+
+            ToolbarItems.Add(new ToolbarItem("Downloads", "download_icon.png", async () =>
+            {
+                await Navigation.PushAsync(new Downloads());
+
+            }));
         }
 
         private async void SearchButton_Clicked(object sender, EventArgs e)
         {
+
+            
+
+
             try
             {
+                vidview.Children.Clear();
+                
                 ActivityIndicator activityIndicator = new ActivityIndicator();
                 activityIndicator.IsVisible = true;
                 activityIndicator.IsEnabled = true;
@@ -73,17 +85,14 @@ namespace Y2Offline.Views
 
                     stackLayout.Children.Add(stackLayout1);
 
-                    Button button = new Button();
 
-                    button.Clicked += async (sender2, args) =>
+                    var tgr = new TapGestureRecognizer();
+                    tgr.Tapped += async (sender2, args) =>
                     {
-                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);//ActivityIndicator tähän
                         await Navigation.PushAsync(new VideoInfo(video));
                     };
-                    button.HeightRequest = 4;
-                    
-                    button.Text = "Download";
-                    stackLayout.Children.Add(button);
+                    stackLayout.GestureRecognizers.Add(tgr);
 
                     vidview.Children.Add(stackLayout);
 

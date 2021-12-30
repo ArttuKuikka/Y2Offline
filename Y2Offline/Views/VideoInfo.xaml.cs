@@ -1,7 +1,9 @@
-﻿using System;
+﻿using PCLStorage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,14 +23,33 @@ namespace Y2Offline.Views
         {
             InitializeComponent();
 
-            if(video == null) { DisplayAlert("Error", "error getting video info", "OK"); return; }
+            var tmpdir = System.IO.Path.GetTempPath();
+
+            var dir = Path.Combine(tmpdir, video.Id + ".jpg");
+
+            //lataa thumnnail
+            using (WebClient webClient = new WebClient())
+            {
+                try
+                {
+                    
+
+                    webClient.DownloadFile("https://i.ytimg.com/vi/" + video.Id + "/0.jpg", dir);
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Error", "Error while downloading thumbnail", "OK");
+                }
+            }
+
+            if (video == null) { DisplayAlert("Error", "error getting video info", "OK"); return; }
             
 
             y2video = new Y2Sharp.Youtube.Video();
 
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
-            ThumbnailImage.Source = video.Thumbnail;
+            ThumbnailImage.Source = dir;
 
 
             //mp3 manual adding
@@ -89,7 +110,7 @@ namespace Y2Offline.Views
             frame2.Margin = new Thickness(5);
 
             DownloadOptions.Children.Add(frame2);
-            //mp3 manual adding
+            //mp3 manual adding end
 
 
             foreach (var vid in y2video.Resolutions)
@@ -121,12 +142,7 @@ namespace Y2Offline.Views
                 button.IsEnabled = false;
                 button.Text = "Downloading...";
                 
-                
-
-                //string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
-                //var path = Path.Combine(filePath, video.Title);
-
+              
                 var res = vid.Replace("p", string.Empty);
 
                 try
@@ -138,6 +154,9 @@ namespace Y2Offline.Views
                 catch (Exception ex)
                 {
                     await DisplayAlert("Error downloading", ex.ToString(), "OK");
+
+                    button.Text = "ERROR";
+                    button.BackgroundColor = Color.Red;
                 }
                 
             };
@@ -162,19 +181,50 @@ namespace Y2Offline.Views
 
             string folderpath = Path.Combine(filePath, video.Id);
 
+            var tmpdir = System.IO.Path.GetTempPath();
+
+            var dir = Path.Combine(tmpdir, video.Id + ".jpg");
+
             Directory.CreateDirectory(folderpath);
+
+            var succsesfuldownload = true;
 
             var videoname = Path.Combine(folderpath, video.Id + "." + type);
 
-            await y2video.DownloadAsync(videoname, type, quality);
+            try
+            {
+                await y2video.DownloadAsync(videoname, type, quality);
+            }
+            catch(Exception)
+            {
+                succsesfuldownload = false;
+            }
 
+
+            if (succsesfuldownload)
+            {
+                string infofilecontent = "Title=" + video.Title + ";" + "Author=" + video.Author + ";" + "Type=" + type + ";";
+
+                var infofilepath = Path.Combine(folderpath, video.Id + ".txt");
+
+                File.WriteAllText(infofilepath, infofilecontent);
+
+                try
+                {
+                    File.Copy(dir, folderpath, true);
+                }
+                catch (Exception) { }
+            }
+            else
+            {
+                //delete just created dir
+                IFolder ifolder = FileSystem.Current.LocalStorage;
+                IFolder file = await ifolder.GetFolderAsync(folderpath);
+                await file.DeleteAsync();
+            }
             
 
-            string infofilecontent = "Title=" + video.Title + ";" + "Author=" + video.Author + ";" + "Type="+ type + ";";
-
-            var infofilepath = Path.Combine(folderpath, video.Id + ".txt");  
-
-            File.WriteAllText(infofilepath, infofilecontent);
+           
 
             
 

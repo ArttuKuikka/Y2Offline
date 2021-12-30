@@ -22,5 +22,10 @@ namespace Y2Offline.Views
         {
             //Settings1.Default.notchint = Int32.Parse(notch.Text); //joskus int check
         }
+
+        private void SwipeGestureRecognizer_Swiped(object sender, SwipedEventArgs e)
+        {
+            DisplayAlert("Swipe detected", "swipe", "OK");
+        }
     }
 }
