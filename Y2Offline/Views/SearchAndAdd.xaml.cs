@@ -43,8 +43,17 @@ namespace Y2Offline.Views
                 //{ IsRunning = true; IsEnabled = true; IsVisible = true; };
                 mainlayout.Children.Add(activityIndicator);
 
-                var yt = new Services.YTSearch();
-                List<Services.YTVid> result = await yt.Run(SearchBox.Text);
+                List<Services.YTVid> result = new List<Services.YTVid>();
+
+                try
+                {
+                    var yt = new Services.YTSearch();
+                    result = await yt.Run(SearchBox.Text);
+                }
+                catch(Exception)
+                {
+                    await DisplayAlert("Error", "Error while searching videos. check your internet connection", "OK");
+                }
 
                 activityIndicator.IsRunning = false;
                 
