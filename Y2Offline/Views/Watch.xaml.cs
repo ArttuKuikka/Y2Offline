@@ -126,18 +126,31 @@ namespace Y2Offline.Views
                 sgr.Direction = SwipeDirection.Left;
                 sgr.Swiped += async (sender2, args) =>
                 {
-                    MainStack.Children.Remove(stackLayout);
+                    //are you sure dialagod
+                    bool answer = await DisplayAlert("Are you sure you want to delete this video", Title, "Yes", "No");
 
-                    try
+                    if (answer)
                     {
-                        IFolder ifolder = FileSystem.Current.LocalStorage;
-                        IFolder file = await ifolder.GetFolderAsync(folder);
-                        await file.DeleteAsync();
+                        MainStack.Children.Remove(stackLayout);
+
+                        try
+                        {
+                            IFolder ifolder = FileSystem.Current.LocalStorage;
+                            IFolder file = await ifolder.GetFolderAsync(folder);
+                            await file.DeleteAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            await DisplayAlert("Error", "Error while deleting file, you might have swiped too fast", "OK");
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        await DisplayAlert("Error", "Error while deleting file, you might have swiped too fast", "OK");
+                        return;
                     }
+
+
+                    
 
                 };
 
