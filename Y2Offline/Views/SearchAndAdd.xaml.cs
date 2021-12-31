@@ -40,7 +40,7 @@ namespace Y2Offline.Views
                 activityIndicator.IsVisible = true;
                 activityIndicator.IsEnabled = true;
                 activityIndicator.IsRunning = true;
-                //{ IsRunning = true; IsEnabled = true; IsVisible = true; };
+                
                 mainlayout.Children.Add(activityIndicator);
 
                 List<Services.YTVid> result = new List<Services.YTVid>();
@@ -54,6 +54,7 @@ namespace Y2Offline.Views
                 {
                     await DisplayAlert("Error", "Error while searching videos. check your internet connection", "OK");
                 }
+                
 
                 activityIndicator.IsRunning = false;
                 

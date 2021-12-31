@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Y2Offline.Views.SettingsPage"
+             Title="Settings">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="#3b403f" >
+
+            <StackLayout Orientation="Vertical" Margin="15">
+                
+                <Label Text="Search result limit" HorizontalOptions="Center" FontSize="20" TextColor="White"></Label>
+                <Slider Minimum="0" Maximum="50" x:Name="searchlimitslider" ValueChanged="searchlimitslider_ValueChanged" />
+                <Label Text="15" x:Name="SliderValueLabel" HorizontalOptions="Center" FontSize="17" TextColor="White"></Label>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Margin="15">
+                <Switch IsToggled="True" x:Name="LoadThumbnailsSwitch" />
+                <Label Text="Load thumbnails" FontSize="20" TextColor="White"></Label>
+            </StackLayout>
+
+
+            <Button Text="Save settings" Clicked="Save_Clicked" VerticalOptions="Start" Margin="15"></Button>
+            <Button Text="Reset settings" Clicked="Reset_Clicked" VerticalOptions="Start" Margin="15, 0 ,15, 10"></Button>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

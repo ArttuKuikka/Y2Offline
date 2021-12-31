@@ -32,7 +32,7 @@
     <TabBar>
         <ShellContent Title="Search" Icon="download_icon.png" ContentTemplate="{DataTemplate local:SearchAndAdd}" />
         <ShellContent Title="Watch" Icon="watch_icon.png" ContentTemplate="{DataTemplate local:Watch}" />
-        <ShellContent Title="Settings" Icon="settings_icon.png" ContentTemplate="{DataTemplate local:Settings}" />
+        <ShellContent Title="Settings" Icon="settings_icon.png" ContentTemplate="{DataTemplate local:SettingsPage}" />
     </TabBar>
 
     <!--
