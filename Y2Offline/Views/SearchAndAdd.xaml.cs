@@ -89,7 +89,25 @@ namespace Y2Offline.Views
                     var tgr = new TapGestureRecognizer();
                     tgr.Tapped += async (sender2, args) =>
                     {
-                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);//ActivityIndicator tähän
+                        
+                        
+                        ActivityIndicator activityIndicator2 = new ActivityIndicator();
+
+                        stackLayout.Children.Add(activityIndicator2);
+
+                        activityIndicator2.HorizontalOptions = LayoutOptions.Center;
+                        activityIndicator2.VerticalOptions = LayoutOptions.Center;
+                        activityIndicator2.IsVisible = true;
+                        activityIndicator2.IsEnabled = true;
+                        activityIndicator2.IsRunning = true;
+
+                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+
+                        activityIndicator2.IsEnabled = false;
+                        activityIndicator2.IsRunning = false;
+                        stackLayout.Children.Remove(activityIndicator2);
+                        
+
                         await Navigation.PushAsync(new VideoInfo(video));
                     };
                     stackLayout.GestureRecognizers.Add(tgr);

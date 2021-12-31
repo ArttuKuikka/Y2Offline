@@ -5,7 +5,7 @@
              Title="Add"
              >
     <ContentPage.Content>
-        <StackLayout BackgroundColor="#3b403f">
+        <StackLayout BackgroundColor="#3b403f" x:Name="BackroundLayout">
             <ScrollView>
                 <StackLayout Margin="20, 10" x:Name="mainlayout">
                     <Entry Placeholder="Search Youtube or paste URL" PlaceholderColor="White" HeightRequest="50" FontSize="20" x:Name="SearchBox" TextColor="White" BackgroundColor="#4f4f4f" />
