@@ -14,7 +14,7 @@ using Google.Apis.Upload;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
-
+using Newtonsoft.Json.Linq;
 
 namespace Y2Offline.Services
 {
@@ -35,6 +35,8 @@ namespace Y2Offline.Services
 
         public async Task<List<Services.YTVid>> Run(string searchterm)
         {
+            var downloadthumbnails = GetShowThumbnails();
+            
             if(searchterm == null) { throw new Exception("searchterm was null"); }
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -44,7 +46,10 @@ namespace Y2Offline.Services
 
             var searchListRequest = youtubeService.Search.List("snippet");
             searchListRequest.Q = searchterm; // Replace with your search term.
-            searchListRequest.MaxResults = 10;
+
+            var searchlimit = GetSearchLimit();
+
+            searchListRequest.MaxResults = Convert.ToInt64(searchlimit);
 
             // Call the search.list method to retrieve results matching the specified query term.
             var searchListResponse = await searchListRequest.ExecuteAsync();
@@ -65,17 +70,25 @@ namespace Y2Offline.Services
                         vid.Title = searchResult.Snippet.Title;
                         vid.Author = searchResult.Snippet.ChannelTitle;
                         vid.Id = searchResult.Id.VideoId;
-
-                        //Get thumbnail
-                        byte[] imageBytes = new WebClient().DownloadData("https://i.ytimg.com/vi/" + searchResult.Id.VideoId + "/0.jpg");
-                        MemoryStream ms = new MemoryStream(imageBytes);
                         
+
+                        if (downloadthumbnails)
+                        {
+                            //Get thumbnail
+                            byte[] imageBytes = new WebClient().DownloadData("https://i.ytimg.com/vi/" + searchResult.Id.VideoId + "/0.jpg");
+                            MemoryStream ms = new MemoryStream(imageBytes);
+
 
                             vid.Thumbnail = ImageSource.FromStream(() => {
                                 ms.Flush();
                                 ms.Position = 0;
                                 return ms;
                             });
+                        }
+                        else
+                        {
+                            vid.Thumbnail = null;
+                        }
 
 
                         vidlist.Add(vid);
@@ -92,6 +105,48 @@ namespace Y2Offline.Services
             return vidlist;
             
             
+        }
+
+        public double GetSearchLimit()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (Double)jsonObject["searchlimit"];
+
+            }
+            else
+            {
+                return 15;
+            }
+        }
+
+        public bool GetShowThumbnails()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (bool)jsonObject["showthumbnails"];
+
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Newtonsoft.Json.Linq;
 
 namespace Y2Offline.Views
 {
@@ -24,7 +25,12 @@ namespace Y2Offline.Views
                 await Navigation.PushAsync(new Downloads());
 
             }));
+
+            loadthumbnails = GetShowThumbnails();
         }
+
+        public bool loadthumbnails { get; set; }
+        
 
         private async void SearchButton_Clicked(object sender, EventArgs e)
         {
@@ -66,14 +72,17 @@ namespace Y2Offline.Views
                     StackLayout stackLayout = new StackLayout();
                     stackLayout.Orientation = StackOrientation.Horizontal;
 
-                    Image image = new Image();
-                    image.WidthRequest = 60;
-                    image.HeightRequest = 20;
+                    if (loadthumbnails)
+                    {
+                        Image image = new Image();
+                        image.WidthRequest = 60;
+                        image.HeightRequest = 20;
 
-                    image.Source = video.Thumbnail;
+                        image.Source = video.Thumbnail;
 
 
-                    stackLayout.Children.Add(image);
+                        stackLayout.Children.Add(image);
+                    }
 
                     StackLayout stackLayout1 = new StackLayout();
 
@@ -137,7 +146,26 @@ namespace Y2Offline.Views
 
         }
 
-        
+        public bool GetShowThumbnails()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (bool)jsonObject["showthumbnails"];
+
+            }
+            else
+            {
+                return true;
+            }
+        }
 
 
 

@@ -132,6 +132,7 @@ namespace Y2Offline.Views
                     if (answer)
                     {
                         MainStack.Children.Remove(stackLayout);
+                        
 
                         try
                         {
@@ -143,6 +144,8 @@ namespace Y2Offline.Views
                         {
                             await DisplayAlert("Error", "Error while deleting file, you might have swiped too fast", "OK");
                         }
+
+                        MainWatch();
                     }
                     else
                     {

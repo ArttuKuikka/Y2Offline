@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,22 +15,75 @@ namespace Y2Offline.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
+        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        
+
         public SettingsPage()
         {
             InitializeComponent();
 
-            searchlimitslider.Value = Settings.Default.SearchResultLimit;
+            string mypath = Path.Combine(filePath, "settings.json");
 
-            LoadThumbnailsSwitch.IsToggled = Settings.Default.DownloadThumbnails;
+            if (!File.Exists(mypath))
+            {
+                var myData = new
+                {
+                    searchlimit = "15",
+                    showthumbnails = "True"
+                };
+
+                string jsonData = JsonConvert.SerializeObject(myData);
+
+                try
+                {
+                    File.WriteAllText(mypath, jsonData);
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Error while writing to file", ex.Message, "OK");
+                }
+            }
+
+            JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+
+            int searchlimit = (int)jsonObject["searchlimit"];
+            bool showthumbnails = (bool)jsonObject["showthumbnails"];
+
+            searchlimitslider.Value = searchlimit;
+            LoadThumbnailsSwitch.IsToggled = showthumbnails;
+
+            //debug
+            DebugLabel.Text = File.ReadAllText(mypath);
 
         }
 
         private void Save_Clicked(object sender, EventArgs e)
         {
-            Settings.Default.SearchResultLimit = searchlimitslider.Value;
-            Settings.Default.DownloadThumbnails = LoadThumbnailsSwitch.IsToggled;
+            string mypath = Path.Combine(filePath, "settings.json");
+
+           
+
+            var myData = new
+            {
+                searchlimit = Math.Round(searchlimitslider.Value).ToString(),
+                showthumbnails = LoadThumbnailsSwitch.IsToggled.ToString()
+                };
+
+                string jsonData = JsonConvert.SerializeObject(myData);
+
+            DebugLabel.Text = jsonData;
+
+            try
+            {
+                File.WriteAllText(mypath, jsonData);
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error while writing to file", ex.Message, "OK");
+                
+            }
             
-            Settings.Default.Save();
         }
 
         private void Reset_Clicked(object sender, EventArgs e)
@@ -41,7 +97,9 @@ namespace Y2Offline.Views
 
         private void searchlimitslider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            SliderValueLabel.Text = searchlimitslider.Value.ToString();
+            var noobslider = Math.Round(searchlimitslider.Value);
+            
+            SliderValueLabel.Text = noobslider.ToString();
         }
     }
 }

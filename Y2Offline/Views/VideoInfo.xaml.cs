@@ -1,4 +1,5 @@
-﻿using PCLStorage;
+﻿using Newtonsoft.Json.Linq;
+using PCLStorage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,19 +28,26 @@ namespace Y2Offline.Views
 
             var dir = Path.Combine(tmpdir, video.Id + ".jpg");
 
-            //lataa thumnnail
-            using (WebClient webClient = new WebClient())
+            if (GetShowThumbnails())
             {
-                try
+                //lataa thumnnail
+                using (WebClient webClient = new WebClient())
                 {
-                    
+                    try
+                    {
 
-                    webClient.DownloadFile("https://i.ytimg.com/vi/" + video.Id + "/0.jpg", dir);
+
+                        webClient.DownloadFile("https://i.ytimg.com/vi/" + video.Id + "/0.jpg", dir);
+                    }
+                    catch (Exception)
+                    {
+                        DisplayAlert("Error", "Error while downloading thumbnail", "OK");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    DisplayAlert("Error", "Error while downloading thumbnail", "OK");
-                }
+            }
+            else
+            {
+                dir = null;
             }
 
             if (video == null) { DisplayAlert("Error", "error getting video info", "OK"); return; }
@@ -230,8 +238,29 @@ namespace Y2Offline.Views
 
         }
 
-        
+        public bool GetShowThumbnails()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string mypath = Path.Combine(filePath, "settings.json");
 
-        
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (bool)jsonObject["showthumbnails"];
+
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
+
+
     }
 }
