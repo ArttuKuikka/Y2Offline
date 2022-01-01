@@ -8,6 +8,8 @@
                 <Image HeightRequest="200" Margin="40, 10" x:Name="ThumbnailImage"></Image>
                 <Label HorizontalTextAlignment="Start" Margin="5, 0" TextColor="Black" FontSize="20" x:Name="VideoTitle"></Label>
                 <Label FontSize="16" x:Name="ChannelName" Margin="5, 0"></Label>
+                <Label FontSize="16" x:Name="PublishedAtLabel" Margin="5, 0"></Label>
+                <Label FontSize="15" TextColor="Black" x:Name="Descriptionlabel" Margin="5, 0" IsEnabled="False"></Label>
                 <StackLayout x:Name="DownloadOptions">
                   
                     

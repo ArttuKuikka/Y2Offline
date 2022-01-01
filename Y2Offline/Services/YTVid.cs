@@ -13,5 +13,9 @@ namespace Y2Offline.Services
         public string Author { get; set; }
         public string Id { get; set; }
         public ImageSource Thumbnail { get; set; }
+
+        public DateTime PublishedAt { get; set; }
+
+        public string Description { get; set; }
     }
 }

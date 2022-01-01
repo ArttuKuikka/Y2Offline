@@ -20,7 +20,11 @@ namespace Y2Offline.Views
 
         public SettingsPage()
         {
+           
             InitializeComponent();
+           
+                
+            
 
             string mypath = Path.Combine(filePath, "settings.json");
 
@@ -29,7 +33,7 @@ namespace Y2Offline.Views
                 var myData = new
                 {
                     searchlimit = "15",
-                    showthumbnails = "True"
+                    showthumbnails = "true"
                 };
 
                 string jsonData = JsonConvert.SerializeObject(myData);
@@ -50,11 +54,9 @@ namespace Y2Offline.Views
             int searchlimit = (int)jsonObject["searchlimit"];
             bool showthumbnails = (bool)jsonObject["showthumbnails"];
 
+
             searchlimitslider.Value = searchlimit;
             LoadThumbnailsSwitch.IsToggled = showthumbnails;
-
-            //debug
-            DebugLabel.Text = File.ReadAllText(mypath);
 
         }
 
@@ -72,7 +74,7 @@ namespace Y2Offline.Views
 
                 string jsonData = JsonConvert.SerializeObject(myData);
 
-            DebugLabel.Text = jsonData;
+            
 
             try
             {

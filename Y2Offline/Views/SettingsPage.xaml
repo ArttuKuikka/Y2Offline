@@ -7,9 +7,9 @@
         <StackLayout BackgroundColor="#3b403f" >
 
             <StackLayout Orientation="Vertical" Margin="15">
-                
+
                 <Label Text="Search result limit" HorizontalOptions="Center" FontSize="20" TextColor="White"></Label>
-                <Slider Minimum="1" Maximum="50" x:Name="searchlimitslider" ValueChanged="searchlimitslider_ValueChanged"  />
+                <Slider Maximum="50" Minimum="1" x:Name="searchlimitslider" ValueChanged="searchlimitslider_ValueChanged"  />
                 <Label Text="15" x:Name="SliderValueLabel" HorizontalOptions="Center" FontSize="17" TextColor="White"></Label>
             </StackLayout>
 
@@ -22,7 +22,7 @@
             <Button Text="Save settings" Clicked="Save_Clicked" VerticalOptions="Start" Margin="15"></Button>
             <Button Text="Reset settings" Clicked="Reset_Clicked" VerticalOptions="Start" Margin="15, 0 ,15, 10"></Button>
 
-            <Label x:Name="DebugLabel" Margin="10"></Label>
+            <Label Text="Some changes might require the app to be restarted" HorizontalOptions="Center" TextColor="White" FontSize="15"></Label>
 
         </StackLayout>
     </ContentPage.Content>

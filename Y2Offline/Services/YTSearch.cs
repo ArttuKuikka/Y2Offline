@@ -70,6 +70,8 @@ namespace Y2Offline.Services
                         vid.Title = searchResult.Snippet.Title;
                         vid.Author = searchResult.Snippet.ChannelTitle;
                         vid.Id = searchResult.Id.VideoId;
+                        vid.PublishedAt = (DateTime)searchResult.Snippet.PublishedAt;
+                        vid.Description = searchResult.Snippet.Description;
                         
 
                         if (downloadthumbnails)

@@ -58,6 +58,9 @@ namespace Y2Offline.Views
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
             ThumbnailImage.Source = dir;
+            PublishedAtLabel.Text = video.PublishedAt.ToString();
+            Descriptionlabel.Text = video.Description;
+
 
 
             //mp3 manual adding
@@ -259,8 +262,6 @@ namespace Y2Offline.Views
             }
         }
 
-
-
-
+        
     }
 }
