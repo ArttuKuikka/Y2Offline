@@ -9,6 +9,8 @@ using Xamarin.Forms;
 using Google.Apis.YouTube.v3;
 using Google.Apis.Services;
 using System.Linq;
+using Android.Widget;
+using Android.Views;
 
 namespace Y2Offline.Droid
 {
@@ -46,7 +48,7 @@ namespace Y2Offline.Droid
         {
             
             //add loading animation here
-            
+            bool invalidurl = false;
             
             var url = Intent.GetStringExtra(Android.Content.Intent.ExtraText);
             url = url + ";";
@@ -78,40 +80,89 @@ namespace Y2Offline.Droid
             {
                 videoid = GetBetween(url, "youtube.com/v/", "&");
             }
+            else if (url.Contains("m.youtube.com/watch?v=") && url.Length > 47)
+            {
+                videoid = GetBetween(url, "m.youtube.com/watch?v=", "&");
+            }
+            else if (url.Contains("m.youtube.com/watch?v=") && url.Length < 47)
+            {
+                videoid = GetBetween(url, "m.youtube.com/watch?v=", ";");
+            }
+            else if (url.Contains("www.youtube.com/watch?v=") && url.Length > 35)
+            {
+                videoid = GetBetween(url, "www.youtube.com/watch?v=", "&");
+            }
+            else if (url.Contains("www.youtube.com/watch?v=") && url.Length < 35)
+            {
+                videoid = GetBetween(url, "www.youtube.com/watch?v=", ";");
+            }
             else
             {
-                //error
+               invalidurl = true;
+                new AlertDialog.Builder(this)
+                         .SetTitle("Error")
+                         .SetMessage("Invalid url")
+                         
+                         .SetPositiveButton("OK", (dialog, whichButton) =>
+                         {
+                         
+                    FinishAndRemoveTask();
+                             FinishAffinity();
+                         })
+                         .Show();
             }
 
+            if(videoid == null) { invalidurl = true; }
 
-            await Y2Sharp.Youtube.Video.GetInfo(videoid);
 
-            Services.YTVidDetails videoDetails = null;
-            using (var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            if (!invalidurl)
             {
-                ApiKey = "AIzaSyDSf8QFsOOdjTMwOpa1408Beo1vskmNPkI",
-            }))
-            {
-                var searchRequest = youtubeService.Videos.List("snippet");
-                searchRequest.Id = videoid;
-                var searchResponse = await searchRequest.ExecuteAsync();
-
-                var youTubeVideo = searchResponse.Items.FirstOrDefault();
-                if (youTubeVideo != null)
+                try
                 {
-                    videoDetails = new Services.YTVidDetails()
+                    await Y2Sharp.Youtube.Video.GetInfo(videoid);
+
+                    Services.YTVidDetails videoDetails = null;
+                    using (var youtubeService = new YouTubeService(new BaseClientService.Initializer()
                     {
-                        VideoId = youTubeVideo.Id,
-                        Description = youTubeVideo.Snippet.Description,
-                        Title = youTubeVideo.Snippet.Title,
-                        ChannelTitle = youTubeVideo.Snippet.ChannelTitle
-                    };
+                        ApiKey = "AIzaSyDSf8QFsOOdjTMwOpa1408Beo1vskmNPkI",
+                    }))
+                    {
+                        var searchRequest = youtubeService.Videos.List("snippet");
+                        searchRequest.Id = videoid;
+                        var searchResponse = await searchRequest.ExecuteAsync();
+
+                        var youTubeVideo = searchResponse.Items.FirstOrDefault();
+                        if (youTubeVideo != null)
+                        {
+                            videoDetails = new Services.YTVidDetails()
+                            {
+                                VideoId = youTubeVideo.Id,
+                                Description = youTubeVideo.Snippet.Description,
+                                Title = youTubeVideo.Snippet.Title,
+                                ChannelTitle = youTubeVideo.Snippet.ChannelTitle
+                            };
+                        }
+
+                    }
+
+
+                    LoadApplication(new App(1, videoDetails));
                 }
+                catch(Exception ex)
+                {
+                    new AlertDialog.Builder(this)
+                         .SetTitle("Error")
+                         .SetMessage(ex.Message)
 
+                         .SetPositiveButton("OK", (dialog, whichButton) =>
+                         {
+
+                             FinishAndRemoveTask();
+                             FinishAffinity();
+                         })
+                         .Show();
+                }
             }
-
-
-                LoadApplication(new App(1, videoDetails));
 
         }
 
