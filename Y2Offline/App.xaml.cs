@@ -9,12 +9,21 @@ namespace Y2Offline
     public partial class App : Application
     {
 
-        public App()
+        public App(int state, Services.YTVidDetails details)
         {
             InitializeComponent();
 
+
+            if(state == 0)
+            {
+                MainPage = new AppShell();
+            }
+            else if(state == 1)
+            {
+                MainPage = new VideoInfo_y2sharp(details);
+            }
             
-            MainPage = new AppShell();
+            
         }
 
         protected override void OnStart()

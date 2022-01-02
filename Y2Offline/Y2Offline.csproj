@@ -43,4 +43,10 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\VideoInfo_y2sharp.xaml.cs">
+      <DependentUpon>VideoInfo_y2sharp.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
