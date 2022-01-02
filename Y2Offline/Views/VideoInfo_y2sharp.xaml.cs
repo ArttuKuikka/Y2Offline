@@ -222,7 +222,9 @@ namespace Y2Offline.Views
 
             if (succsesfuldownload)
             {
-                string infofilecontent = "Title=" + y2video.Title + ";" + "Author=" + ytvid.ChannelTitle + ";" + "Type=" + type + ";";
+                string infofilecontent = "Title=" + y2video.Title + ";" + "Author=" + ytvid.ChannelTitle + ";" + "Type=" + type + ";" + "Published=" + ytvid.PublicationDate.ToString() + ";";
+
+                
 
                 var infofilepath = Path.Combine(folderpath, y2id + ".txt");
 

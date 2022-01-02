@@ -22,6 +22,10 @@ namespace Y2Offline
             {
                 MainPage = new VideoInfo_y2sharp(details);
             }
+            else if(state == 2)
+            {
+                MainPage = new LoadingPage();
+            }
             
             
         }

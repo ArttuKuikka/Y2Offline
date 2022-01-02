@@ -47,6 +47,7 @@ namespace Y2Offline.Views
                 var Title = "Error getting info";
                 var Author = foldername;
                 var Type = "mp4";
+                var PublishedAt = "";
 
                 if (File.Exists(Infotextapth))
                 {
@@ -55,6 +56,7 @@ namespace Y2Offline.Views
                     Title = GetBetween(infotext, "Title=", ";");
                     Author = GetBetween(infotext, "Author=", ";");
                     Type = GetBetween(infotext, "Type=", ";");
+                    PublishedAt = GetBetween(infotext, "Published=", ";");
                 }
                 else
                 {
@@ -109,10 +111,12 @@ namespace Y2Offline.Views
                 Label label1 = new Label();
                 label1.FontSize = 12;
                 label1.VerticalOptions = LayoutOptions.CenterAndExpand;
-                label1.Text = Author;
+                label1.Text = Author + "  " + PublishedAt;
                 label1.TextColor = Color.Black;
 
                 stackLayout1.Children.Add(label1);
+
+               
 
                 stackLayout.Children.Add(stackLayout1);
 

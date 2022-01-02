@@ -46,8 +46,10 @@ namespace Y2Offline.Droid
 
         private async void handleSendUrl()
         {
+            //loading animation
+            LoadApplication(new App(2, null));
+
             
-            //add loading animation here
             bool invalidurl = false;
             
             var url = Intent.GetStringExtra(Android.Content.Intent.ExtraText);
@@ -59,6 +61,22 @@ namespace Y2Offline.Droid
             {
                 
                 videoid = GetBetween(url, "youtu.be/", ";");
+            }
+            else if (url.Contains("m.youtube.com/watch?v=") && url.Length > 47)
+            {
+                videoid = GetBetween(url, "m.youtube.com/watch?v=", "&");
+            }
+            else if (url.Contains("m.youtube.com/watch?v=") && url.Length < 47)
+            {
+                videoid = GetBetween(url, "m.youtube.com/watch?v=", ";");
+            }
+            else if (url.Contains("www.youtube.com/watch?v=") && url.Length > 44)
+            {
+                videoid = GetBetween(url, "www.youtube.com/watch?v=", "&");
+            }
+            else if (url.Contains("www.youtube.com/watch?v=") && url.Length < 44)
+            {
+                videoid = GetBetween(url, "www.youtube.com/watch?v=", ";");
             }
             else if (url.Contains("youtube.com/watch?v=") && url.Length > 44)
             {
@@ -79,22 +97,6 @@ namespace Y2Offline.Droid
             else if (url.Contains("youtube.com/v/") && url.Length > 38)
             {
                 videoid = GetBetween(url, "youtube.com/v/", "&");
-            }
-            else if (url.Contains("m.youtube.com/watch?v=") && url.Length > 47)
-            {
-                videoid = GetBetween(url, "m.youtube.com/watch?v=", "&");
-            }
-            else if (url.Contains("m.youtube.com/watch?v=") && url.Length < 47)
-            {
-                videoid = GetBetween(url, "m.youtube.com/watch?v=", ";");
-            }
-            else if (url.Contains("www.youtube.com/watch?v=") && url.Length > 35)
-            {
-                videoid = GetBetween(url, "www.youtube.com/watch?v=", "&");
-            }
-            else if (url.Contains("www.youtube.com/watch?v=") && url.Length < 35)
-            {
-                videoid = GetBetween(url, "www.youtube.com/watch?v=", ";");
             }
             else
             {
@@ -139,7 +141,8 @@ namespace Y2Offline.Droid
                                 VideoId = youTubeVideo.Id,
                                 Description = youTubeVideo.Snippet.Description,
                                 Title = youTubeVideo.Snippet.Title,
-                                ChannelTitle = youTubeVideo.Snippet.ChannelTitle
+                                ChannelTitle = youTubeVideo.Snippet.ChannelTitle,
+                                PublicationDate = youTubeVideo.Snippet.PublishedAt
                             };
                         }
 
