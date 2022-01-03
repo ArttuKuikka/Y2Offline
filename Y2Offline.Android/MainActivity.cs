@@ -11,6 +11,8 @@ using Google.Apis.Services;
 using System.Linq;
 using Android.Widget;
 using Android.Views;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace Y2Offline.Droid
 {
@@ -25,7 +27,12 @@ namespace Y2Offline.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+            
+            
             LoadApplication(new App(0, null));
+            
+            
 
 
             if (Intent.Action.Equals(Intent.Action) &&
@@ -126,7 +133,7 @@ namespace Y2Offline.Droid
                     Services.YTVidDetails videoDetails = null;
                     using (var youtubeService = new YouTubeService(new BaseClientService.Initializer()
                     {
-                        ApiKey = "AIzaSyDSf8QFsOOdjTMwOpa1408Beo1vskmNPkI",
+                        ApiKey = GetApiKey(),
                     }))
                     {
                         var searchRequest = youtubeService.Videos.List("snippet");
@@ -142,7 +149,7 @@ namespace Y2Offline.Droid
                                 Description = youTubeVideo.Snippet.Description,
                                 Title = youTubeVideo.Snippet.Title,
                                 ChannelTitle = youTubeVideo.Snippet.ChannelTitle,
-                                PublicationDate = youTubeVideo.Snippet.PublishedAt
+                                PublicationDate = (DateTime)youTubeVideo.Snippet.PublishedAt
                             };
                         }
 
@@ -180,6 +187,27 @@ namespace Y2Offline.Droid
             }
 
             return "";
+        }
+
+        public string GetApiKey()
+        {
+            string filePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyVideos);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (string)jsonObject["apikey"];
+
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 }

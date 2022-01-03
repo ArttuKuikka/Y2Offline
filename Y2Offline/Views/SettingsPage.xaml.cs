@@ -15,16 +15,23 @@ namespace Y2Offline.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
     {
-        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
         
 
         public SettingsPage()
         {
            
             InitializeComponent();
-           
-                
-            
+
+
+            try
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            catch(Exception ex)
+            {
+                DisplayAlert("Error while creating app folder", ex.Message, "OK");
+            }
 
             string mypath = Path.Combine(filePath, "settings.json");
 
@@ -33,7 +40,8 @@ namespace Y2Offline.Views
                 var myData = new
                 {
                     searchlimit = "15",
-                    showthumbnails = "true"
+                    showthumbnails = "true",
+                    apikey = ""
                 };
 
                 string jsonData = JsonConvert.SerializeObject(myData);
@@ -48,15 +56,24 @@ namespace Y2Offline.Views
                 }
             }
 
-            JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+            try
+            {
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
 
 
-            int searchlimit = (int)jsonObject["searchlimit"];
-            bool showthumbnails = (bool)jsonObject["showthumbnails"];
+                int searchlimit = (int)jsonObject["searchlimit"];
+                bool showthumbnails = (bool)jsonObject["showthumbnails"];
+                string apikey = (string)jsonObject["apikey"];
 
 
-            searchlimitslider.Value = searchlimit;
-            LoadThumbnailsSwitch.IsToggled = showthumbnails;
+                searchlimitslider.Value = searchlimit;
+                LoadThumbnailsSwitch.IsToggled = showthumbnails;
+                ApiKeyEntry.Text = apikey;
+            }
+            catch(Exception ex)
+            {
+                DisplayAlert("Error while reading data", ex.Message, "OK");
+            }
 
         }
 
@@ -69,7 +86,8 @@ namespace Y2Offline.Views
             var myData = new
             {
                 searchlimit = Math.Round(searchlimitslider.Value).ToString(),
-                showthumbnails = LoadThumbnailsSwitch.IsToggled.ToString()
+                showthumbnails = LoadThumbnailsSwitch.IsToggled.ToString(),
+                apikey = ApiKeyEntry.Text
                 };
 
                 string jsonData = JsonConvert.SerializeObject(myData);
@@ -103,5 +121,7 @@ namespace Y2Offline.Views
             
             SliderValueLabel.Text = noobslider.ToString();
         }
+
+        
     }
 }

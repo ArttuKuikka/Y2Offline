@@ -66,7 +66,7 @@ namespace Y2Offline.Views
             VideoTitle.Text = VidDetails.Title;
             ChannelName.Text = VidDetails.ChannelTitle;
             ThumbnailImage.Source = dir;
-            PublishedAtLabel.Text = VidDetails.PublicationDate.ToString();
+            PublishedAtLabel.Text = VidDetails.PublicationDate.ToString("dd/MM/yyyy HH:mm");
             Descriptionlabel.Text = VidDetails.Description;
 
 
@@ -100,7 +100,7 @@ namespace Y2Offline.Views
 
 
 
-                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
                 var path = Path.Combine(filePath, y2video.Title);
 
@@ -196,7 +196,7 @@ namespace Y2Offline.Views
 
         public async Task Download(string quality, string type)
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
             string folderpath = Path.Combine(filePath, y2id);
 
@@ -222,7 +222,7 @@ namespace Y2Offline.Views
 
             if (succsesfuldownload)
             {
-                string infofilecontent = "Title=" + y2video.Title + ";" + "Author=" + ytvid.ChannelTitle + ";" + "Type=" + type + ";" + "Published=" + ytvid.PublicationDate.ToString() + ";";
+                string infofilecontent = "Title=" + y2video.Title + ";" + "Author=" + ytvid.ChannelTitle + ";" + "Type=" + type + ";" + "Published=" + ytvid.PublicationDate.ToString("dd/MM/yyyy HH:mm") + ";";
 
                 
 
@@ -253,7 +253,7 @@ namespace Y2Offline.Views
 
         public bool GetShowThumbnails()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             string mypath = Path.Combine(filePath, "settings.json");
 
             if (File.Exists(mypath))

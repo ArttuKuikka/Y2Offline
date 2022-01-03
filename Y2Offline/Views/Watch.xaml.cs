@@ -32,7 +32,7 @@ namespace Y2Offline.Views
 
         public void MainWatch()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
             var folderlist = Directory.GetDirectories(filePath);
             foreach (var folder in folderlist)
@@ -144,7 +144,7 @@ namespace Y2Offline.Views
                             IFolder file = await ifolder.GetFolderAsync(folder);
                             await file.DeleteAsync();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             await DisplayAlert("Error", "Error while deleting file, you might have swiped too fast", "OK");
                         }

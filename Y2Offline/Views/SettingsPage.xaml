@@ -6,6 +6,12 @@
     <ContentPage.Content>
         <StackLayout BackgroundColor="#3b403f" >
 
+            <StackLayout>
+                <Label Text="Your API key" HorizontalOptions="Center" FontSize="20" TextColor="White"></Label>
+                <Entry HorizontalOptions="CenterAndExpand" Placeholder="Your yotube data api v3 key" FontSize="20" TextColor="White" Margin="15, 0 ,15, 10" x:Name="ApiKeyEntry" />
+            </StackLayout>
+            
+            
             <StackLayout Orientation="Vertical" Margin="15">
 
                 <Label Text="Search result limit" HorizontalOptions="Center" FontSize="20" TextColor="White"></Label>

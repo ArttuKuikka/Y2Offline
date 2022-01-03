@@ -40,7 +40,7 @@ namespace Y2Offline.Services
             if(searchterm == null) { throw new Exception("searchterm was null"); }
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
-                ApiKey = "AIzaSyDSf8QFsOOdjTMwOpa1408Beo1vskmNPkI",
+                ApiKey = GetApiKey(),
                 ApplicationName = this.GetType().ToString()
             });
 
@@ -111,7 +111,7 @@ namespace Y2Offline.Services
 
         public double GetSearchLimit()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             string mypath = Path.Combine(filePath, "settings.json");
 
             if (File.Exists(mypath))
@@ -132,7 +132,7 @@ namespace Y2Offline.Services
 
         public bool GetShowThumbnails()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             string mypath = Path.Combine(filePath, "settings.json");
 
             if (File.Exists(mypath))
@@ -148,6 +148,27 @@ namespace Y2Offline.Services
             else
             {
                 return true;
+            }
+        }
+
+        public string GetApiKey()
+        {
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (string)jsonObject["apikey"];
+
+            }
+            else
+            {
+                return "";
             }
         }
     }

@@ -58,7 +58,7 @@ namespace Y2Offline.Views
             VideoTitle.Text = video.Title;
             ChannelName.Text = video.Author;
             ThumbnailImage.Source = dir;
-            PublishedAtLabel.Text = video.PublishedAt.ToString();
+            PublishedAtLabel.Text = video.PublishedAt.ToString("dd/MM/yyyy HH:mm");
             Descriptionlabel.Text = video.Description;
 
 
@@ -92,7 +92,7 @@ namespace Y2Offline.Views
 
 
 
-                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
                 var path = Path.Combine(filePath, video.Title);
 
@@ -188,7 +188,7 @@ namespace Y2Offline.Views
 
         public async Task Download(string quality, string type, Services.YTVid video)
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
             string folderpath = Path.Combine(filePath, video.Id);
 
@@ -202,6 +202,8 @@ namespace Y2Offline.Views
 
             var videoname = Path.Combine(folderpath, video.Id + "." + type);
 
+            
+
             try
             {
                 await y2video.DownloadAsync(videoname, type, quality);
@@ -214,7 +216,7 @@ namespace Y2Offline.Views
 
             if (succsesfuldownload)
             {
-                string infofilecontent = "Title=" + video.Title + ";" + "Author=" + video.Author + ";" + "Type=" + type + ";" + "Published="+ video.PublishedAt.ToString()+ ";";
+                string infofilecontent = "Title=" + video.Title + ";" + "Author=" + video.Author + ";" + "Type=" + type + ";" + "Published="+ video.PublishedAt.ToString("dd/MM/yyyy HH:mm") + ";";
 
                 var infofilepath = Path.Combine(folderpath, video.Id + ".txt");
 
@@ -225,6 +227,9 @@ namespace Y2Offline.Views
                     File.Copy(dir, folderpath, true);
                 }
                 catch (Exception) { }
+
+                
+
             }
             else
             {
@@ -243,7 +248,7 @@ namespace Y2Offline.Views
 
         public bool GetShowThumbnails()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             string mypath = Path.Combine(filePath, "settings.json");
 
             if (File.Exists(mypath))

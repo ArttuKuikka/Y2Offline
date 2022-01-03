@@ -20,6 +20,11 @@ namespace Y2Offline.Views
         {
             InitializeComponent();
 
+            if (GetApiKey() == "")
+            {
+                DisplayAlert("Welcome to Y2Offline", "Please set your api key in the settings first, otherwise the app won't work", "OK");
+            }
+
             ToolbarItems.Add(new ToolbarItem("Downloads", "download_icon.png", async () =>
             {
                 await Navigation.PushAsync(new Downloads());
@@ -120,7 +125,14 @@ namespace Y2Offline.Views
                         activityIndicator2.IsEnabled = true;
                         activityIndicator2.IsRunning = true;
 
-                        await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+                        try
+                        {
+                            await Y2Sharp.Youtube.Video.GetInfo(video.Id);
+                        }
+                        catch (Exception)
+                        {
+                            await DisplayAlert("Error", "Error while getting video id, try againg later", "OK");
+                        }
 
                         activityIndicator2.IsEnabled = false;
                         activityIndicator2.IsRunning = false;
@@ -148,7 +160,7 @@ namespace Y2Offline.Views
 
         public bool GetShowThumbnails()
         {
-            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
             string mypath = Path.Combine(filePath, "settings.json");
 
             if (File.Exists(mypath))
@@ -164,6 +176,27 @@ namespace Y2Offline.Views
             else
             {
                 return true;
+            }
+        }
+
+        public string GetApiKey()
+        {
+            string filePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyVideos);
+            string mypath = Path.Combine(filePath, "settings.json");
+
+            if (File.Exists(mypath))
+            {
+                //if settings have been generated
+
+
+                JObject jsonObject = JObject.Parse(File.ReadAllText(mypath));
+
+                return (string)jsonObject["apikey"];
+
+            }
+            else
+            {
+                return "";
             }
         }
 

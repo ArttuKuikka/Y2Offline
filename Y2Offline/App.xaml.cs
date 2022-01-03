@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Y2Offline.Services;
@@ -28,10 +30,14 @@ namespace Y2Offline
             }
             
             
+            
         }
 
         protected override void OnStart()
         {
+            base.OnStart();
+            
+
         }
 
         protected override void OnSleep()
@@ -41,5 +47,6 @@ namespace Y2Offline
         protected override void OnResume()
         {
         }
+        
     }
 }

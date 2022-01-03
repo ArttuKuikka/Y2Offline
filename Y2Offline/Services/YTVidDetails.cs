@@ -10,6 +10,6 @@ namespace Y2Offline.Services
         public string Description { get; set; }
         public string Title { get; set; }
         public string ChannelTitle { get; set; }
-        public DateTime? PublicationDate { get; set; }
+        public DateTime PublicationDate { get; set; }
     }
 }
