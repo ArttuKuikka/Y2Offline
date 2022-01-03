@@ -3,4 +3,4 @@ Offline youtube using Y2Sharp
 
 
 
-if you want to use this you are gonna have to provide your own youtube api id
+Own youtube data api v3 key need
