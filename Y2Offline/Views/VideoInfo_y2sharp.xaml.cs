@@ -119,10 +119,50 @@ namespace Y2Offline.Views
 
             };
 
+            Button addquebutton2 = new Button();
+            addquebutton2.Text = "Add to queue";
+            addquebutton2.VerticalOptions = LayoutOptions.End;
+            addquebutton2.HorizontalOptions = LayoutOptions.End;
+
+            addquebutton2.Clicked += async (sender2, args) =>
+            {
+                addquebutton2.IsEnabled = false;
+
+                var video = new Services.YTVid
+                {
+                    Title = ytvid.Title,
+                    Author = ytvid.ChannelTitle,
+                    Id = y2id,
+                    PublishedAt = ytvid.PublicationDate,
+                    State = 0,
+                    Resolution = "MP3"
+                };
+
+                var que = new Services.QueueHandler();
+
+                if (que.IsAlreadyInQueue(ytvid.VideoId))
+                {
+                    await DisplayAlert("Error", "this video is already in the queue", "OK");
+
+                }
+                else
+                {
+                    que.AddToQueue(video);
+
+                    addquebutton2.Text = "Added";
+                }
+
+                
+            };
+
+
+            
+
 
 
             stackLayout2.Children.Add(label2);
             stackLayout2.Children.Add(button2);
+            stackLayout2.Children.Add(addquebutton2);
 
             frame2.Content = stackLayout2;
             frame2.BorderColor = Color.Black;
@@ -179,13 +219,47 @@ namespace Y2Offline.Views
                 }
                 
             };
-            
 
+                Button addquebutton = new Button();
+                addquebutton.Text = "Add to queue";
+                addquebutton.VerticalOptions = LayoutOptions.End;
+                addquebutton.HorizontalOptions = LayoutOptions.End;
 
-            stackLayout.Children.Add(label);
+                addquebutton.Clicked += async (sender2, args) =>
+                {
+                    addquebutton.IsEnabled = false;
+
+                    var video = new Services.YTVid
+                    {
+                        Title = ytvid.Title,
+                        Author = ytvid.ChannelTitle,
+                        Id = y2id,
+                        PublishedAt = ytvid.PublicationDate,
+                        State = 0,
+                        Resolution = vid.Replace("p", string.Empty)
+                };
+
+                    var que = new Services.QueueHandler();
+
+                    if (que.IsAlreadyInQueue(ytvid.VideoId))
+                    {
+                        await DisplayAlert("Error", "this video is already in the queue", "OK");
+
+                    }
+                    else
+                    {
+                        que.AddToQueue(video);
+
+                        addquebutton2.Text = "Added";
+                    }
+
+                };
+
+                stackLayout.Children.Add(label);
             stackLayout.Children.Add(button);
+                stackLayout.Children.Add(addquebutton);
 
-            frame.Content = stackLayout;
+                frame.Content = stackLayout;
             frame.BorderColor = Color.Black;
             frame.Margin = new Thickness(5);
 
@@ -242,6 +316,8 @@ namespace Y2Offline.Views
                 IFolder ifolder = FileSystem.Current.LocalStorage;
                 IFolder file = await ifolder.GetFolderAsync(folderpath);
                 await file.DeleteAsync();
+
+                DisplayAlert("Error", "Error while downloading file", "OK");
             }
             
 

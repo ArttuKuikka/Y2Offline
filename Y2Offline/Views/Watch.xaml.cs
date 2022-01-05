@@ -34,10 +34,14 @@ namespace Y2Offline.Views
         {
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
+            MainStack.Children.Clear();
+
             var folderlist = Directory.GetDirectories(filePath);
             foreach (var folder in folderlist)
             {
 
+                
+                
                 //get info for each video
                 var foldername = folder.Replace(filePath, string.Empty);
                 foldername = foldername.Replace("/", string.Empty);

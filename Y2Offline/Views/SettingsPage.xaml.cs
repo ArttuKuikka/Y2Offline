@@ -69,6 +69,7 @@ namespace Y2Offline.Views
                 searchlimitslider.Value = searchlimit;
                 LoadThumbnailsSwitch.IsToggled = showthumbnails;
                 ApiKeyEntry.Text = apikey;
+                ApiKeyEntry.IsPassword = true;
             }
             catch(Exception ex)
             {
@@ -122,6 +123,18 @@ namespace Y2Offline.Views
             SliderValueLabel.Text = noobslider.ToString();
         }
 
-        
+        private void ShowApiCheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if(ShowApiCheckbox.IsChecked == true)
+            {
+                ApiKeyEntry.IsPassword = false;
+
+            }
+            else
+            {
+                
+                ApiKeyEntry.IsPassword = true;
+            }
+        }
     }
 }

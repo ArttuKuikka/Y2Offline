@@ -17,5 +17,8 @@ namespace Y2Offline.Services
         public DateTime PublishedAt { get; set; }
 
         public string Description { get; set; }
+        public int State { get; set; }
+
+        public string Resolution { get; set; }
     }
 }

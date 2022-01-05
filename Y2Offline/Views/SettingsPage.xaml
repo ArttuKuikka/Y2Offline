@@ -9,6 +9,10 @@
             <StackLayout>
                 <Label Text="Your API key" HorizontalOptions="Center" FontSize="20" TextColor="White"></Label>
                 <Entry HorizontalOptions="CenterAndExpand" Placeholder="Your yotube data api v3 key" FontSize="20" TextColor="White" Margin="15, 0 ,15, 10" x:Name="ApiKeyEntry" />
+                <StackLayout Orientation="Horizontal">
+                    <CheckBox x:Name="ShowApiCheckbox" IsChecked="False" CheckedChanged="ShowApiCheckbox_CheckedChanged"></CheckBox>
+                    <Label FontSize="20" TextColor="White" Text="Show API"></Label>
+                </StackLayout>
             </StackLayout>
             
             
