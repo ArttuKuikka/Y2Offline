@@ -31,6 +31,8 @@
 
             <Button Text="Save settings" Clicked="Save_Clicked" VerticalOptions="Start" Margin="15"></Button>
             <Button Text="Reset settings" Clicked="Reset_Clicked" VerticalOptions="Start" Margin="15, 0 ,15, 10"></Button>
+            <Button Text="Reset Queue" Clicked="Button_Clicked"  VerticalOptions="Start" Margin="15, 0 ,15, 10">
+            </Button>
 
             <Label Text="Some changes might require the app to be restarted" HorizontalOptions="Center" TextColor="White" FontSize="15"></Label>
 

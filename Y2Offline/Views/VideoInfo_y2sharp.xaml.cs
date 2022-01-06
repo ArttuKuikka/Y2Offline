@@ -250,7 +250,7 @@ namespace Y2Offline.Views
                     {
                         que.AddToQueue(video);
 
-                        addquebutton2.Text = "Added";
+                        addquebutton.Text = "Added";
                     }
 
                 };

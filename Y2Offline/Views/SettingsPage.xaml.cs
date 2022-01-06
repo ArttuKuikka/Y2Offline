@@ -136,5 +136,11 @@ namespace Y2Offline.Views
                 ApiKeyEntry.IsPassword = true;
             }
         }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            var qh = new Services.QueueHandler();
+            qh.ResetQueue();
+        }
     }
 }
