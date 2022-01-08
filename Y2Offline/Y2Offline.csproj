@@ -10,13 +10,13 @@
     <PackageReference Include="Google.Apis" Version="1.55.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.55.0.2449" />
-    <PackageReference Include="LibVLCSharp.Forms" Version="3.6.4" />
+    <PackageReference Include="LibVLCSharp.Forms" Version="3.6.5" />
     <PackageReference Include="PCLStorage" Version="1.0.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="VideoLAN.LibVLC.Android" Version="3.2.0.1" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />  
-    <PackageReference Include="Y2Sharp" Version="4.1.0" />
+    <PackageReference Include="Y2Sharp" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,11 +45,5 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\VideoInfo_y2sharp.xaml.cs">
-      <DependentUpon>VideoInfo_y2sharp.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>

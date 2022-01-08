@@ -11,7 +11,7 @@ namespace Y2Offline
     public partial class App : Application
     {
 
-        public App(int state, Services.YTVidDetails details)
+        public App(int state, Services.YTVid details)
         {
             InitializeComponent();
 
@@ -22,7 +22,7 @@ namespace Y2Offline
             }
             else if(state == 1)
             {
-                MainPage = new VideoInfo_y2sharp(details);
+                MainPage = new VideoInfo(details);
             }
             else if(state == 2)
             {

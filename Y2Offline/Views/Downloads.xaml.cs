@@ -19,6 +19,8 @@ namespace Y2Offline.Views
     {
 
         private Services.QueueHandler QueueHandler { get; set; }
+
+        INotificationManager notificationManager;
         public Downloads()
         {
             InitializeComponent();
@@ -29,13 +31,15 @@ namespace Y2Offline.Views
 
             QueueHandler = new Services.QueueHandler();
 
-           
+            notificationManager = DependencyService.Get<INotificationManager>();
+
+
             MakeGUI();
         }
 
         public void MakeGUI()
         {
-            MainStack.Children.Clear();
+            VideoStack.Children.Clear();
             foreach (var item in QueueHandler.GetQueue())
             {
                 var Title = (string)item["Title"];
@@ -136,7 +140,7 @@ namespace Y2Offline.Views
                 frame.Content = stackLayout;
                 frame.BorderColor = Color.Black;
                 frame.Margin = new Thickness(2);
-                MainStack.Children.Add(frame);
+                VideoStack.Children.Add(frame);
 
             }
 
@@ -152,6 +156,8 @@ namespace Y2Offline.Views
             activityIndicator1.IsEnabled = true;
             activityIndicator1.IsRunning = true;
 
+            
+
             var Title = (string)videojson["Title"];
             var Author = (string)videojson["Author"];
             var Id = (string)videojson["Id"];
@@ -161,13 +167,13 @@ namespace Y2Offline.Views
 
             var Type = "Mp4";
 
-            if(Resolution == "MP3")
+            if(Resolution.ToUpper() == "MP3")
             {
                 Resolution = "128";
                 Type = "Mp3";
             }
 
-
+            notificationManager.SendNotification("Downloading video...", Title);
 
             string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
 
@@ -235,14 +241,185 @@ namespace Y2Offline.Views
             
             MakeGUI();
 
-            
+            notificationManager.ReceiveNotification("Downloading video...", Title);
 
         }
 
 
         async Task DownloadAll()
         {
+            notificationManager.SendNotification("Downloading all videos in the queue", "All videos in the queue are being downloaded");
+
+            MakeGUI();
+
+            var Queue = QueueHandler.GetQueue();
+
+            var downloadstate = 1;
+            var videocount = Queue.Count();
+
             
+
+            double currentvideosize = 0;
+            double finalvideosize = 0;
+            double readyprosentage = 0;
+
+
+            //Make gui for whats being downloaded now
+            Frame frame = new Frame();
+            frame.BackgroundColor = Color.FromHex("#434545");
+            frame.BorderColor = Color.Black;
+
+
+            StackLayout stack = new StackLayout();
+
+            var nowdownloading = new Label()
+            {
+                Text = $"Now Downloading {downloadstate} / {videocount}",
+                FontSize = 20,
+                TextColor = Color.White
+            };
+
+            var TitleText = new Label()
+            {
+                Text = "",
+                FontSize = 15,
+                TextColor = Color.White
+            };
+
+            var AuthorText = new Label()
+            {
+                Text = "",
+                FontSize = 10,
+                TextColor = Color.White
+            };
+
+            var ProgressText = new Label()
+            {
+                Text = $"Downloading {currentvideosize}MB / {finalvideosize}MB.  {readyprosentage}% ready",
+                FontSize = 18,
+                TextColor = Color.White
+            };
+
+            stack.Children.Add(nowdownloading);
+            stack.Children.Add(TitleText);
+            stack.Children.Add(AuthorText);
+            stack.Children.Add(ProgressText);
+
+
+            frame.Content = stack;
+            MainStack.Children.Insert(0, frame);
+
+            foreach (var video in Queue)
+            {
+                var Title = (string)video["Title"];
+                var Author = (string)video["Author"];
+                var Id = (string)video["Id"];
+                var PublishedAt = (DateTime)video["PublishedAt"];
+                var State = (int)video["State"];
+                var Resolution = (string)video["Resolution"];
+                var Type = "mp4";
+                var size = (double)video["Size"];
+
+                if(Resolution.ToUpper() == "MP3")
+                {
+                    Type = "mp3";
+                    Resolution = "128";
+                }
+
+               
+
+                TitleText.Text = Title;
+                AuthorText.Text = Author;
+                finalvideosize = size;
+                ProgressText.Text = $"Downloading {currentvideosize}MB / {finalvideosize}MB.  {readyprosentage}% ready";
+
+
+                string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+
+                string folderpath = Path.Combine(filePath, Id);
+
+                var tmpdir = System.IO.Path.GetTempPath();
+
+                var dir = Path.Combine(tmpdir, Id + ".jpg");
+
+                Directory.CreateDirectory(folderpath);
+
+                var succsesfuldownload = true;
+
+                var videoname = Path.Combine(folderpath, Id + "." + Type);
+
+                
+
+                try
+                {
+                    await Y2Sharp.Youtube.Video.GetInfo(Id);
+
+                    var y2video = new Y2Sharp.Youtube.Video();
+
+                    y2video.ProgressChanged += (FinalFileSize, CurrentFileSize, progressPercentage) =>
+                    {
+                        currentvideosize = Math.Round(ConvertBytesToMegabytes((long)CurrentFileSize), 2);
+                        finalvideosize = Math.Round(ConvertBytesToMegabytes((long)FinalFileSize), 2);
+                        readyprosentage = (double)progressPercentage;
+
+                        ProgressText.Text = $"Downloading {currentvideosize}MB / {finalvideosize}MB.  {readyprosentage}% ready";
+
+                    };
+
+                    await y2video.DownloadAsync(videoname, Type, Resolution);
+                    await DownloadSpeed(videoname, Resolution);
+                }
+                catch (Exception)
+                {
+
+                    succsesfuldownload = false;
+                }
+
+
+                if (succsesfuldownload)
+                {
+                    string infofilecontent = "Title=" + Title + ";" + "Author=" + Author + ";" + "Type=" + Type + ";" + "Published=" + PublishedAt.ToString("dd/MM/yyyy HH:mm") + ";";
+
+                    var infofilepath = Path.Combine(folderpath, Id + ".txt");
+
+                    File.WriteAllText(infofilepath, infofilecontent);
+
+                    try
+                    {
+                        File.Copy(dir, folderpath, true);
+                    }
+                    catch (Exception) { }
+
+                    QueueHandler.RemoveFromQueue(Id);
+
+                    downloadstate++;
+
+                    if(downloadstate > videocount) { downloadstate = videocount; }
+
+                    nowdownloading.Text = $"Now Downloading {downloadstate} / {videocount}";
+
+                    
+
+                    MakeGUI();
+
+                }
+                else
+                {
+                    //delete just created dir
+                    IFolder ifolder = FileSystem.Current.LocalStorage;
+                    IFolder file = await ifolder.GetFolderAsync(folderpath);
+                    await file.DeleteAsync();
+
+                    DisplayAlert("Error", "Error while downloading file, try again later", "OK");
+                }
+
+                
+
+
+
+
+            }
+
         }
 
 
@@ -250,8 +427,15 @@ namespace Y2Offline.Views
         {
 
         }
-        
+
+        public double ConvertBytesToMegabytes(long bytes)
+        {
+            return (bytes / 1024f) / 1024f;
+        }
 
        
+
+
+
     }
 }

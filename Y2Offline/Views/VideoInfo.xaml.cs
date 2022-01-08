@@ -171,7 +171,7 @@ namespace Y2Offline.Views
             label.FontSize = 25;
             label.VerticalTextAlignment = TextAlignment.Center;
             label.TextColor = Color.Black;
-            label.Text = vid;
+            label.Text = vid.res;
 
             Button button = new Button();
             button.Text = "Download";
@@ -184,7 +184,7 @@ namespace Y2Offline.Views
                 button.Text = "Downloading...";
                 
               
-                var res = vid.Replace("p", string.Empty);
+                var res = vid.res.Replace("p", string.Empty);
 
                 try
                 {
@@ -223,7 +223,8 @@ namespace Y2Offline.Views
                     else
                     {
                         video.State = 0;
-                        video.Resolution = vid.Replace("p", string.Empty);
+                        video.Resolution = vid.res.Replace("p", string.Empty);
+                        video.size = vid.sizeasmb;
 
                         que.AddToQueue(video);
 

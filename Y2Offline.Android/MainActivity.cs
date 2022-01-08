@@ -130,7 +130,7 @@ namespace Y2Offline.Droid
                 {
                     await Y2Sharp.Youtube.Video.GetInfo(videoid);
 
-                    Services.YTVidDetails videoDetails = null;
+                    Services.YTVid videoDetails = null;
                     using (var youtubeService = new YouTubeService(new BaseClientService.Initializer()
                     {
                         ApiKey = GetApiKey(),
@@ -143,13 +143,13 @@ namespace Y2Offline.Droid
                         var youTubeVideo = searchResponse.Items.FirstOrDefault();
                         if (youTubeVideo != null)
                         {
-                            videoDetails = new Services.YTVidDetails()
+                            videoDetails = new Services.YTVid()
                             {
-                                VideoId = youTubeVideo.Id,
-                                Description = youTubeVideo.Snippet.Description,
-                                Title = youTubeVideo.Snippet.Title,
-                                ChannelTitle = youTubeVideo.Snippet.ChannelTitle,
-                                PublicationDate = (DateTime)youTubeVideo.Snippet.PublishedAt
+                               Id = youTubeVideo.Id,
+                               Description = youTubeVideo.Snippet.Description,
+                               Title = youTubeVideo.Snippet.Title,
+                               Author = youTubeVideo.Snippet.ChannelTitle,
+                               PublishedAt = (DateTime)youTubeVideo.Snippet.PublishedAt
                             };
                         }
 

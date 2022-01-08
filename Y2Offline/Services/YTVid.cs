@@ -20,5 +20,7 @@ namespace Y2Offline.Services
         public int State { get; set; }
 
         public string Resolution { get; set; }
+
+        public double size { get; set; }
     }
 }

@@ -6,11 +6,15 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout x:Name="MainStack" BackgroundColor="#3b403f">
+                
+                <StackLayout x:Name="VideoStack" BackgroundColor="#3b403f">
 
 
-               
 
+
+                </StackLayout>
             </StackLayout>
+            
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

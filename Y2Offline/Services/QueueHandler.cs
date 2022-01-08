@@ -34,7 +34,8 @@ namespace Y2Offline.Services
                 Id = video.Id,
                 PublishedAt = video.PublishedAt,
                 State = 0,
-                Resolution = video.Resolution
+                Resolution = video.Resolution,
+                Size = video.size
             };
             string jsonData = JsonConvert.SerializeObject(myData);
 
@@ -115,6 +116,11 @@ namespace Y2Offline.Services
 
         public JArray GetQueue() 
         {
+            if (!File.Exists(DownloadsFilePath))
+            {
+                File.WriteAllText(DownloadsFilePath, "[]");
+            }
+
             return JArray.Parse(File.ReadAllText(DownloadsFilePath).Replace("%20", " "));
         }
 
