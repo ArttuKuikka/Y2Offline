@@ -120,6 +120,14 @@ namespace Y2Offline.Views
 
                             button1.Source = "download_icon.png";
                             // delete folder
+
+                            string filePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+
+                            string folderpath = Path.Combine(filePath, Id);
+
+                            IFolder ifolder = FileSystem.Current.LocalStorage;
+                            IFolder file = await ifolder.GetFolderAsync(folderpath);
+                            await file.DeleteAsync();
                         }
                     }
 
@@ -131,6 +139,24 @@ namespace Y2Offline.Views
                 button1.BorderColor = Color.FromHex("#3b403f");
                 button1.HorizontalOptions = LayoutOptions.End;
                 stackLayout.Children.Add(button1);
+
+                ImageButton button2 = new ImageButton();
+                button2.Source = "trash.png";
+                button2.HeightRequest = 10;
+                button2.WidthRequest = 50;
+                button2.Clicked += async (sender2, args) =>
+                {
+                    QueueHandler.RemoveFromQueue(Id);
+
+                    MakeGUI();
+
+
+                };
+                button2.BackgroundColor = Color.FromHex("#3b403f");
+                button2.BorderColor = Color.FromHex("#3b403f");
+                button2.HorizontalOptions = LayoutOptions.End;
+
+                stackLayout.Children.Add(button2);
 
 
 
@@ -248,7 +274,7 @@ namespace Y2Offline.Views
 
         async Task DownloadAll()
         {
-            notificationManager.SendNotification("Downloading all videos in the queue", "All videos in the queue are being downloaded");
+            
 
             MakeGUI();
 
@@ -360,7 +386,7 @@ namespace Y2Offline.Views
                     {
                         currentvideosize = Math.Round(ConvertBytesToMegabytes((long)CurrentFileSize), 2);
                         finalvideosize = Math.Round(ConvertBytesToMegabytes((long)FinalFileSize), 2);
-                        readyprosentage = (double)progressPercentage;
+                        readyprosentage = Math.Round((double)progressPercentage, 0);
 
                         ProgressText.Text = $"Downloading {currentvideosize}MB / {finalvideosize}MB.  {readyprosentage}% ready";
 
@@ -419,7 +445,7 @@ namespace Y2Offline.Views
 
 
             }
-
+            MainStack.Children.Remove(frame);
         }
 
 

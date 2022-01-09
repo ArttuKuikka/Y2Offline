@@ -4,6 +4,7 @@
              x:Class="Y2Offline.Views.SettingsPage"
              Title="Settings">
     <ContentPage.Content>
+        <ScrollView>
         <StackLayout BackgroundColor="#3b403f" >
 
             <StackLayout>
@@ -36,6 +37,9 @@
 
             <Label Text="Some changes might require the app to be restarted" HorizontalOptions="Center" TextColor="White" FontSize="15"></Label>
 
+            <Label Text="Y2Offline by github.com/ArttuKuikka" HorizontalOptions="Center" VerticalOptions="End" TextColor="White" FontSize="10"></Label>
+
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
