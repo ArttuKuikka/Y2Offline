@@ -1,21 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.ArttuKuikka.y2offline" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="4" android:versionName="7.1" package="com.ArttuKuikka.y2offline" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
 	<application android:label="Y2Offline" android:theme="@style/MainTheme" android:icon="@drawable/logo">
-		<activity android:name="com.ArttuKuikka.y2offline.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" >
-			 <intent-filter>
-		            <action android:name="android.intent.action.MAIN" />
-                    <category android:name="android.intent.category.LAUNCHER" />
-	            </intent-filter>
-				
-				<intent-filter>
+		<activity android:name="com.ArttuKuikka.y2offline.MainActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="text/plain" />
-				</intent-filter>
-		
-	           
-				</activity>
+			</intent-filter>
+		</activity>
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
