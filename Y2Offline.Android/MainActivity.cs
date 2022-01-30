@@ -60,66 +60,30 @@ namespace Y2Offline.Droid
             bool invalidurl = false;
             
             var url = Intent.GetStringExtra(Android.Content.Intent.ExtraText);
-            url = url + ";";
+            
 
             string videoid = string.Empty;
 
-            if (url.Contains("youtu.be/"))
+            try
             {
-                
-                videoid = GetBetween(url, "youtu.be/", ";");
+                videoid = getvideoidxamarin(url);
             }
-            else if (url.Contains("m.youtube.com/watch?v=") && url.Length > 47)
+            catch (Exception ex)
             {
-                videoid = GetBetween(url, "m.youtube.com/watch?v=", "&");
-            }
-            else if (url.Contains("m.youtube.com/watch?v=") && url.Length < 47)
-            {
-                videoid = GetBetween(url, "m.youtube.com/watch?v=", ";");
-            }
-            else if (url.Contains("www.youtube.com/watch?v=") && url.Length > 44)
-            {
-                videoid = GetBetween(url, "www.youtube.com/watch?v=", "&");
-            }
-            else if (url.Contains("www.youtube.com/watch?v=") && url.Length < 44)
-            {
-                videoid = GetBetween(url, "www.youtube.com/watch?v=", ";");
-            }
-            else if (url.Contains("youtube.com/watch?v=") && url.Length > 44)
-            {
-                videoid = GetBetween(url, "youtube.com/watch?v=", "&");
-            }
-            else if (url.Contains("youtube.com/watch?v=") && url.Length < 44)
-            {
-                videoid = GetBetween(url, "youtube.com/watch?v=", ";");
-            }
-            else if (url.Contains("youtube.com/v/") && url.Length < 38)
-            {
-                videoid = GetBetween(url, "youtube.com/v/", ";");
-            }
-            else if (url.Contains("youtube.com/v/") && url.Length > 38)
-            {
-                videoid = GetBetween(url, "youtube.com/v/", "?");
-            }
-            else if (url.Contains("youtube.com/v/") && url.Length > 38)
-            {
-                videoid = GetBetween(url, "youtube.com/v/", "&");
-            }
-            else
-            {
-               invalidurl = true;
+                invalidurl = true;
                 new AlertDialog.Builder(this)
                          .SetTitle("Error")
-                         .SetMessage("Invalid url")
-                         
+                         .SetMessage("Invalid url " + url)
+
                          .SetPositiveButton("OK", (dialog, whichButton) =>
                          {
-                         
-                    FinishAndRemoveTask();
+
+                             FinishAndRemoveTask();
                              FinishAffinity();
                          })
                          .Show();
             }
+            
 
             if(videoid == null) { invalidurl = true; }
 
@@ -187,6 +151,54 @@ namespace Y2Offline.Droid
             }
 
             return "";
+        }
+
+        string getvideoidxamarin(string url)
+        {
+            if (url == null) { throw new ArgumentNullException("url"); }
+
+            var viewParam = url;
+
+            if (url.Contains("watch?v="))
+            {
+                viewParam = url.Substring(url.LastIndexOf("watch?v=") + 8);
+                char[] charArray = viewParam.ToCharArray();
+                Array.Reverse(charArray);
+                var tempstr = new string(charArray);
+                tempstr = tempstr.Remove(0, tempstr.Length - 11);
+                char[] charArray2 = tempstr.ToCharArray();
+                Array.Reverse(charArray2);
+                viewParam = new string(charArray2);
+
+            }
+            else if (url.Contains("youtube.com/v/") || url.Contains("youtu.be/"))
+            {
+                viewParam = url.Substring(url.LastIndexOf("/") + 1);
+                if (viewParam.Length > 10)
+                {
+                    char[] charArray = viewParam.ToCharArray();
+                    Array.Reverse(charArray);
+                    var tempstr = new string(charArray);
+                    tempstr = tempstr.Remove(0, tempstr.Length - 11);
+                    char[] charArray2 = tempstr.ToCharArray();
+                    Array.Reverse(charArray2);
+                    viewParam = new string(charArray2);
+                }
+
+            }
+            else
+            {
+                throw new Exception("Can't parse the url");
+            }
+
+
+
+
+
+
+            if (viewParam == null || viewParam == "") { throw new Exception("Can't parse the url"); }
+
+            return viewParam;
         }
 
         public string GetApiKey()
