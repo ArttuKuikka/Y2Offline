@@ -1,3 +1,6 @@
+# Archived!
+Due to Y2Sharp and xamarin being discontinued this app is useless
+
 # Y2Offline
 
 
